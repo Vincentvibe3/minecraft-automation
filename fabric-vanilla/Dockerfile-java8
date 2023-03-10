@@ -1,0 +1,28 @@
+#Download fabric server
+FROM docker.io/alpine:latest as fabric_download
+ARG mc_version=NONE
+ARG fabric_version=NONE
+ARG fabric_installer_version=NONE
+RUN apk add --no-cache curl
+RUN curl -Jf https://meta.fabricmc.net/v2/versions/loader/${mc_version}/${fabric_version}/${fabric_installer_version}/server/jar -o /server.jar
+
+#Create minecraft files
+FROM docker.io/eclipse-temurin:8 as server_files_setup
+WORKDIR /home/server/data
+COPY --from=fabric_download /server.jar ../server.jar
+RUN java -Xmx2G -jar ../server.jar nogui
+
+# Setup Image
+FROM docker.io/eclipse-temurin:8 
+WORKDIR /home/server/data
+COPY --from=fabric_download /server.jar ../server.jar
+COPY --from=server_files_setup /home/server/data .
+# RUN cp -r ./versions ../versions
+RUN cp -r ./libraries ../libraries
+COPY /start-java8.sh ../start.sh
+RUN chmod +x ../start.sh
+
+# run server
+ENV eula=""
+EXPOSE 25565
+ENTRYPOINT [ "../start.sh" ]

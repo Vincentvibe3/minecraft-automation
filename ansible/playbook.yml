@@ -1,0 +1,11 @@
+---
+- name: Setup server
+  hosts: localhost
+  tasks:
+  - name: Install podman
+    package: name=podman state=latest
+    become: true
+  - name: Install buildah
+    package: name=buildah state=latest
+    become: true
+  

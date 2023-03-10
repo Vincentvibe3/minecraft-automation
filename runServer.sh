@@ -1,0 +1,1 @@
+podman run --rm -p 25565:25565/tcp -p 25565:25565/udp -p 25575:25575 -e eula=true -v "$2:/home/server/data" fabric:$1
