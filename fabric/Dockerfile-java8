@@ -24,5 +24,12 @@ RUN chmod +x ../start.sh
 
 # run server
 ENV eula=""
+ENV seed=""
+ENV rcon=""
+ENV rconpwd=""
+ENV gamemode=""
+ENV difficulty=""
+ENV whitelist=""
 EXPOSE 25565
+EXPOSE 25575
 ENTRYPOINT [ "../start.sh" ]

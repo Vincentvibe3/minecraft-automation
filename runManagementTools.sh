@@ -1,1 +1,0 @@
-podman run --rm --userns=keep-id -p 3000:3000 -v "$1:/home/workspace/data" management
