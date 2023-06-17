@@ -8,4 +8,15 @@
   - name: Install buildah
     package: name=buildah state=latest
     become: true
-  
+  - name: Install python3
+    package: name=python3 state=latest
+    become: true
+  - name: Install requests
+    ansible.builtin.pip:
+      name: requests
+  - name: Clone scripts
+    ansible.builtin.git:
+      repo: https://github.com/Vincentvibe3/minecraft-automation
+      dest: ./minecraft-automation
+      single_branch: yes
+      version: main
