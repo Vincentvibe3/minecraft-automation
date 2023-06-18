@@ -1,0 +1,57 @@
+---
+- name: Setup service
+  hosts: localhost
+  tasks:
+  - name: Create Pod
+    containers.podman.podman_pod:
+      name:  "pod_{{ world }}_fabric_{{ mc_version }}"
+      state: created
+      ports: 
+        - "25565:25565/tcp"
+        - "25565:25565/udp"
+        - "3000:3000"
+      userns: keep-id
+  - name: Run minecraft container
+    containers.podman.podman_container:
+      name: "{{ world }}_fabric_{{ mc_version }}"
+      image: "fabric:{{ mc_version }}"
+      state: created
+      pod: "pod_{{ world }}_fabric_{{ mc_version }}"
+      force_restart: true
+      env: 
+        eula: true
+      volume: 
+        - "{{ world }}:/home/server/data:U"
+  - name: Run management container
+    containers.podman.podman_container:
+      name: "{{ world }}_fabric_{{ mc_version }}_management"
+      image: management:latest
+      pod: "pod_{{ world }}_fabric_{{ mc_version }}"
+      state: created
+      force_restart: true
+      volume: 
+        - "{{ world }}:/home/workspace/data:U"
+  - name: Stop Pod
+    containers.podman.podman_pod:
+      name:  "pod_{{ world }}_fabric_{{ mc_version }}"
+      state: stopped
+  - name: Create systemd files
+    containers.podman.podman_generate_systemd:
+      name: "pod_{{ world }}_fabric_{{ mc_version }}"
+      dest: ~/.config/systemd/user/
+  # - name: Copy Unit files
+  #   ansible.builtin.copy:
+  #     src: "{{ item }}"
+  #     dest: /etc/systemd/system
+  #     owner: root 
+  #     mode: 600
+  #   become: true
+  #   with_fileglob:
+  #     - "~/minecraftSystemdCopy/*"
+  - name: Enable service
+    ansible.builtin.systemd:
+      name: "pod-pod_{{ world }}_fabric_{{ mc_version }}"
+      daemon_reload: yes
+      state: started
+      enabled: yes
+      scope: user

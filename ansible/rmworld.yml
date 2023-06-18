@@ -1,0 +1,23 @@
+---
+- name: Setup service
+  hosts: localhost
+  tasks:
+  - name: Stop and Disable service
+    ansible.builtin.systemd:
+      name: "pod-pod_{{ world }}_fabric_{{ mc_version }}"
+      state: stopped
+      enabled: false
+      scope: user
+
+  - name: Delete service pod
+    ansible.builtin.file:
+      path: ~/.config/systemd/user/pod-pod_{{ world }}_fabric_{{ mc_version }}.service
+      state: absent
+  - name: Delete service container
+    ansible.builtin.file:
+      path: ~/.config/systemd/user/conatiner-{{ world }}_fabric_{{ mc_version }}.service
+      state: absent
+  - name: Delete service management container
+    ansible.builtin.file:
+      path: ~/.config/systemd/user/container-{{ world }}_fabric_{{ mc_version }}_management.service
+      state: absent

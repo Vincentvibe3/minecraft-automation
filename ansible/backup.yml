@@ -1,5 +1,5 @@
 ---
-- name: Delte backup cron job
+- name: Delete backup cron job
   hosts: localhost
   tasks:
   - name: Create backups folder
@@ -13,12 +13,12 @@
       weekday: "*"
       minute: "0"
       hour: "*"
-      job: "~/minecraftScripts/backup.sh {{ world }} {{ mc_ver }} ~/mc_backups/{{ world }}"
+      job: "~/minecraftScripts/backup.sh {{ world }} {{ mc_version }} ~/mc_backups/{{ world }}"
       state: present
 
   - name: Creates a cleanup cron job
     ansible.builtin.cron:
-      name: "Run backup {{ world }} container"
+      name: "Run cleanup {{ world }} container"
       weekday: "*"
       minute: "0"
       hour: "*"
