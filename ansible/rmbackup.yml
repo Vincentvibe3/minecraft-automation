@@ -1,0 +1,16 @@
+---
+- name: Setup backup cron job
+  hosts: localhost
+  tasks:
+
+  - name: Deletes a backup cron job
+    ansible.builtin.cron:
+      name: "Run backup {{ world }} container"
+      job: "~/minecraftScripts/backup.sh {{ world }} {{ mc_ver }} ~/mc_backups/{{ world }}"
+      state: absent
+
+  - name: Deletes a cleanup cron job
+    ansible.builtin.cron:
+      name: "Run backup {{ world }} cleanup"
+      job: "find ~/mc_backups/{{ world }} -mindepth 1 -mtime +5 -delete"
+      state: absent

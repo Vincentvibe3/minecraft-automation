@@ -17,6 +17,21 @@
   - name: Clone scripts
     ansible.builtin.git:
       repo: https://github.com/Vincentvibe3/minecraft-automation
-      dest: ./minecraft-automation
+      dest: ~/minecraftScripts
       single_branch: yes
       version: main
+      depth: 1
+      force: true
+  - name: Find scripts
+    find:
+      paths: ~/minecraftScripts
+      file_type: file
+      patterns: "*.sh"
+    register: filelist
+  - name: Make scripts executable
+    ansible.builtin.file:
+      path: "{{ item.path }}"
+      state: "file"
+      mode: a+x
+    with_items: "{{ filelist.files }}"
+  

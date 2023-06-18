@@ -1,0 +1,11 @@
+---
+- name: Setup service
+  hosts: localhost
+  tasks:
+  - name: Create service
+    template: src=minecraft.service.j2 dest=/etc/systemd/system/minecraft_{{ world }}.service mode=644
+    notify:
+      - reload systemctl
+    
+  - name: Start and enable server
+    service: name=minecraft_{{ world }}.service state=started enabled=true

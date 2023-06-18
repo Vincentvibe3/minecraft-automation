@@ -1,0 +1,10 @@
+[Unit]
+Description=Starts minecraft
+
+[Service]
+User={{ ansible_user }}
+ExecStart=/bin/bash /home/{{ ansible_user }}/minecraftScripts/start.sh {{ world }} {{ mc_version }}
+ExecStop=/bin/bash /home/{{ ansible_user }}/minecraftScripts/stop.sh {{ world }} {{ mc_version }}
+
+[Install]
+WantedBy=multi-user.target
