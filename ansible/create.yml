@@ -38,17 +38,16 @@
   - name: Create systemd files
     containers.podman.podman_generate_systemd:
       name: "pod_{{ world }}_fabric_{{ mc_version }}"
+      dest: ~/minecraftSystemdCopy
+  - name: Copy Unit files
+    ansible.builtin.copy:
+      src: "{{ item }}"
       dest: /etc/systemd/system
+      owner: root 
+      mode: 600
     become: true
-  # - name: Copy Unit files
-  #   ansible.builtin.copy:
-  #     src: "{{ item }}"
-  #     dest: /etc/systemd/system
-  #     owner: root 
-  #     mode: 600
-  #   become: true
-  #   with_fileglob:
-  #     - "~/minecraftSystemdCopy/*"
+    with_fileglob:
+      - "~/minecraftSystemdCopy/*"
   - name: Enable service
     ansible.builtin.systemd:
       name: "pod-pod_{{ world }}_fabric_{{ mc_version }}"
