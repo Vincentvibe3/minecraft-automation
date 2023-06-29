@@ -11,7 +11,7 @@ mc_ver = sys.argv[1]
 loader = sys.argv[2]
 
 with open("apikey.txt", "r") as config:
-	curseforge_api_key = config.read()
+	curseforge_api_key = config.read().strip()
 
 def getInstallList():
 	with open("mods.json", "r") as info:
