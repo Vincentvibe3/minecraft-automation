@@ -39,7 +39,7 @@
     containers.podman.podman_generate_systemd:
       name: "pod_{{ world }}_fabric_{{ mc_version }}"
       dest: /etc/systemd/system
-      become: true
+    become: true
   # - name: Copy Unit files
   #   ansible.builtin.copy:
   #     src: "{{ item }}"
@@ -55,4 +55,4 @@
       daemon_reload: yes
       state: started
       enabled: yes
-      become: true
+    become: true
