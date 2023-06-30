@@ -11,7 +11,6 @@
         - "25565:25565/udp"
         - "3000:3000"
       userns: keep-id
-    become: true
   - name: Run minecraft container
     containers.podman.podman_container:
       name: "{{ world }}_fabric_{{ mc_version }}"
@@ -23,7 +22,6 @@
         eula: true
       volume: 
         - "{{ world }}:/home/server/data:U"
-    become: true
   - name: Run management container
     containers.podman.podman_container:
       name: "{{ world }}_fabric_{{ mc_version }}_management"
@@ -33,17 +31,14 @@
       force_restart: true
       volume: 
         - "{{ world }}:/home/workspace/data:U"
-    become: true
   - name: Stop Pod
     containers.podman.podman_pod:
       name:  "pod_{{ world }}_fabric_{{ mc_version }}"
       state: stopped
-    become: true
   - name: Create systemd files
     containers.podman.podman_generate_systemd:
       name: "pod_{{ world }}_fabric_{{ mc_version }}"
-      dest: "/etc/systemd/system"
-    become: true
+      dest: "~/.config/systemd/user"
   # - name: Copy Unit files
   #   ansible.builtin.copy:
   #     src: "{{ item }}"
@@ -59,18 +54,21 @@
       daemon_reload: yes
       state: started
       enabled: yes
+      scope: user
     become: true
-  - name: Enable service
-    ansible.builtin.systemd:
-      name: "container-{{ world }}_fabric_{{ mc_version }}.service"
-      daemon_reload: yes
-      state: started
-      enabled: yes
-    become: true
-  - name: Enable service
-    ansible.builtin.systemd:
-      name: "container-{{ world }}_fabric_{{ mc_version }}_management.service"
-      daemon_reload: yes
-      state: started
-      enabled: yes
-    become: true
+  # - name: Enable service
+  #   ansible.builtin.systemd:
+  #     name: "container-{{ world }}_fabric_{{ mc_version }}.service"
+  #     daemon_reload: yes
+  #     state: started
+  #     enabled: yes
+  #     scope: user
+  #   become: true
+  # - name: Enable service
+  #   ansible.builtin.systemd:
+  #     name: "container-{{ world }}_fabric_{{ mc_version }}_management.service"
+  #     daemon_reload: yes
+  #     state: started
+  #     enabled: yes
+  #     scope: user
+  #   become: true
