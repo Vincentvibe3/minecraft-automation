@@ -55,7 +55,6 @@
       state: started
       enabled: yes
       scope: user
-    become: true
   # - name: Enable service
   #   ansible.builtin.systemd:
   #     name: "container-{{ world }}_fabric_{{ mc_version }}.service"
