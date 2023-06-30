@@ -60,3 +60,17 @@
       state: started
       enabled: yes
     become: true
+  - name: Enable service
+    ansible.builtin.systemd:
+      name: "container-{{ world }}_fabric_{{ mc_version }}.service"
+      daemon_reload: yes
+      state: started
+      enabled: yes
+    become: true
+  - name: Enable service
+    ansible.builtin.systemd:
+      name: "container-{{ world }}_fabric_{{ mc_version }}_management.service"
+      daemon_reload: yes
+      state: started
+      enabled: yes
+    become: true
