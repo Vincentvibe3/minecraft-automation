@@ -43,6 +43,7 @@
     containers.podman.podman_generate_systemd:
       name: "pod_{{ world }}_fabric_{{ mc_version }}"
       dest: "/etc/systemd/system"
+    become: true
   # - name: Copy Unit files
   #   ansible.builtin.copy:
   #     src: "{{ item }}"
