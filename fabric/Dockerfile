@@ -20,7 +20,7 @@ RUN $JAVA_HOME/bin/jlink \
 FROM docker.io/eclipse-temurin:17 as server_files_setup
 WORKDIR /home/server/data
 COPY --from=fabric_download /server.jar ../server.jar
-RUN java -Xmx2G -jar ../server.jar nogui
+RUN java -Xmx8G -jar ../server.jar nogui
 
 # Setup Image
 FROM docker.io/ubuntu:latest
