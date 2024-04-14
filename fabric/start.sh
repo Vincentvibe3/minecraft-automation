@@ -29,7 +29,7 @@ if test -e ./libraries; then
 	rm -r ./libraries
 fi
 cp -r ../libraries .
-java -Xmx2G -jar ../server.jar nogui &
+java -Xms6G -Xmx6G -XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC -XX:ShenandoahGCMode=iu -XX:+AlwaysPreTouch -XX:+UseNUMA -XX:+DisableExplicitGC -jar ../server.jar nogui &
 # from https://mbien.dev/blog/entry/stopping-containers-correctly
 # Pass SIGTERM to the jvm to allow graceful shutdown
 PID=$!
