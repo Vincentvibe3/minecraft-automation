@@ -1,0 +1,100 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: minecraft-management
+  namespace: worldnamespace
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: minecraft-management
+  
+  template:
+    metadata:
+      labels:
+        app: minecraft-management
+
+    spec:
+      volumes:
+      - name: worldclaim
+        persistentVolumeClaim:
+          claimName: worldclaim
+      - name: bluemap-config-claim
+        persistentVolumeClaim:
+          claimName: bluemap-config-claim
+      - name: bluemap-web-claim
+        persistentVolumeClaim:
+          claimName: bluemap-web-claim
+      - name: bluemap-data-claim
+        persistentVolumeClaim:
+          claimName: bluemap-data-claim
+      
+      initContainers:
+      - name: bluemap-setup
+        image: ghcr.io/bluemap-minecraft/bluemap:v4.1
+        resources:
+          limits:
+            memory: "256Mi"
+            cpu: "1"
+            ephemeral-storage: 1Gi
+        volumeMounts:
+          - name: bluemap-config-claim
+            mountPath: /app/config
+        command: ["sh", "-c", "java -jar cli.jar; echo done"]
+
+      - name: busybox-accept-download
+        image: busybox:1.28
+        resources:
+          limits:
+            memory: "256Mi"
+            cpu: "1"
+            ephemeral-storage: 1Gi
+        volumeMounts:
+          - name: bluemap-config-claim
+            mountPath: /app/config
+        command: ['sh', '-c', "sed -i 's/accept-download:.*/accept-download: true/' /app/config/core.conf"]
+
+      containers:
+      - name: management
+        image: localhost:32000/management:latest
+        resources:
+          limits:
+            memory: "256Mi"
+            cpu: "1"
+            ephemeral-storage: 1Gi
+        volumeMounts:
+          - name: worldclaim
+            mountPath: /home/workspace/world-data
+          - name: bluemap-config-claim
+            mountPath: /home/workspace/bluemap-config
+
+        env:
+          - name: MCRCON_HOST
+            value: "minecraft-rcon"
+          - name: MCRCON_PASS
+            valueFrom:
+              secretKeyRef:
+                name: rcon-secrets
+                key: rconpass
+        ports:
+          - containerPort: 3000
+      - name: bluemap
+        image: ghcr.io/bluemap-minecraft/bluemap:v4.1
+        resources:
+          limits:
+            memory: "1Gi"
+            cpu: "1"
+            ephemeral-storage: 1Gi
+        volumeMounts:
+          - name: bluemap-config-claim
+            mountPath: /app/config
+          - name: bluemap-data-claim
+            mountPath: /app/data
+          - name: bluemap-web-claim
+            mountPath: /app/web
+          - name: worldclaim
+            mountPath: /app/world
+            subPath: world
+        ports:
+          - containerPort: 8100
+        args: ["-r", "-u", "-w"]

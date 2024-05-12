@@ -1,0 +1,77 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: bluemap-volume-config
+spec:
+  capacity:
+    storage: 10Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: local-storage
+  local:
+    path: /home/vincent/minecraft-automation/bluemap-config/config
+  claimRef:
+    name: bluemap-config-claim
+    namespace: worldnamespace
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - dalek
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: bluemap-volume-data
+spec:
+  capacity:
+    storage: 10Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: local-storage
+  local:
+    path: /home/vincent/minecraft-automation/bluemap-config/data
+  claimRef:
+    name: bluemap-data-claim
+    namespace: worldnamespace
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - dalek
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: bluemap-volume-web
+spec:
+  capacity:
+    storage: 10Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: local-storage
+  local:
+    path: /home/vincent/minecraft-automation/bluemap-config/web
+  claimRef:
+    name: bluemap-web-claim
+    namespace: worldnamespace
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - dalek

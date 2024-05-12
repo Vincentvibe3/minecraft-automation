@@ -1,3 +1,5 @@
+#!/bin/python3
+
 import requests
 import subprocess
 
@@ -41,11 +43,15 @@ print("Getting latest Fabric loader")
 fabric_ver = get_fabric_ver()
 print("Getting latest Fabric installer")
 installer_ver  = get_installer_ver()
+print("Select a registry to push to (Leave empty for local)")
+registry = input()
+if registry:
+	registry+="/"
 split_ver = mc_ver.split(".")
 if int(split_ver[0]) == 1 and int(split_ver[1]) < 17:
-	build_command = f"buildah build -t fabric:{mc_ver} -t fabric:latest -f Dockerfile-java8 --build-arg mc_version={mc_ver} --build-arg fabric_version={fabric_ver} --build-arg fabric_installer_version={installer_ver}"
+	build_command = f"buildah build -t {registry}fabric:{mc_ver} -t {registry}fabric:latest -f Dockerfile-java8 --build-arg mc_version={mc_ver} --build-arg fabric_version={fabric_ver} --build-arg fabric_installer_version={installer_ver}"
 else:
-	build_command = f"buildah build -t fabric:{mc_ver} -t fabric:latest --build-arg mc_version={mc_ver} --build-arg fabric_version={fabric_ver} --build-arg fabric_installer_version={installer_ver}"
+	build_command = f"buildah build -t {registry}fabric:{mc_ver} -t {registry}fabric:latest --build-arg mc_version={mc_ver} --build-arg fabric_version={fabric_ver} --build-arg fabric_installer_version={installer_ver}"
 
 print("-"*20)
 print("Summary:")

@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: minecraft-management
+
+spec:
+  ports:
+    - port: 3000
+      protocol: TCP
+      targetPort: 3000
+
+  selector:
+    app: minecraft-management
+
+  type: ClusterIP
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: management-{{ .Values.worldName }}
+
+spec:
+  entryPoints:
+    - websecure
+
+  routes:
+    {{ if eq .Values.ingress.web.singleSubdomain true }}
+    - match: Host(`{{ .Values.ingress.web.webSubdomain }}`) && PathPrefix(`/`)
+    {{ else }}
+    - match: Host(`{{ .Values.ingress.web.codeServerSubdomain }}`) && PathPrefix(`/`)
+    {{ end }}
+      kind: Rule
+
+      services:
+        - name: minecraft-management
+          port: 3000

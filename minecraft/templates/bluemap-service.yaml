@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: bluemap-service
+
+spec:
+  ports:
+    - port: 8100
+      protocol: TCP
+      targetPort: 8100
+
+  selector:
+    app: bluemap
+
+  type: ClusterIP
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: stripprefix-bluemap
+
+spec:
+  stripPrefix:
+    prefixes:
+      - /bluemap
+      - /bluemap/
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: bluemap-ingress
+
+spec:
+  entryPoints:
+    - websecure
+
+  routes:
+    {{ if eq .Values.ingress.web.singleSubdomain true }}
+    - match: Host(`{{ .Values.ingress.web.webSubdomain }}`) && PathPrefix(`/bluemap`)
+    {{ else }}
+    - match: Host(`{{ .Values.ingress.web.bluemapSubdomain }}`) && PathPrefix(`/`)
+    {{ end }}
+      kind: Rule
+      middlewares:
+      - name: stripprefix-bluemap
+      services:
+        - name: bluemap-service
+          port: 8100

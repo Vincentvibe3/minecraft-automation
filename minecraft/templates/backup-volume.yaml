@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ .Values.worldName }}-backup
+spec:
+  capacity:
+    storage: {{ .Values.storage.volumeSize }}
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: {{ .Values.worldName }}-local-storage
+  local:
+    path: {{ .Values.storage.worldDir }}/backup
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - {{ .Values.storage.hostname }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.worldName }}-backup-claim
+spec:
+  resources:
+    requests:
+      storage: {{ .Values.storage.volumeSize }}
+  storageClassName: {{ .Values.worldName }}-local-storage
+  volumeName: {{ .Values.worldName }}-backup
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteMany

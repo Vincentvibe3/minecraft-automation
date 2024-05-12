@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: minecraft
+  namespace: worldnamespace
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: minecraft
+  
+  template:
+    metadata:
+      labels:
+        app: minecraft
+
+    spec:
+      volumes:
+      - name: worldclaim
+        persistentVolumeClaim:
+          claimName: worldclaim
+
+      containers:
+      - name: minecraft
+        image: localhost:32000/fabric:1.20.1
+        env:
+        - name: memory
+          value: "4G"
+        - name: eula
+          value: "true"
+        - name: rcon
+          value: "true"
+        - name: rconpwd
+          valueFrom:
+            secretKeyRef:
+              name: rcon-secrets
+              key: rconpass
+        resources:
+          limits:
+            memory: "5Gi"
+            cpu: "2"
+            ephemeral-storage: 1Gi
+        volumeMounts:
+          - name: worldclaim
+            mountPath: /home/server/data
+        ports:
+          - containerPort: 25565

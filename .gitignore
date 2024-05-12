@@ -1,3 +1,11 @@
 apikey.txt
 mods.json
 mods.old.json
+s3key
+worlds/
+bluemap-config/
+kubernetes/secrets/
+worldstest
+val.yaml
+traefik installation
+backups

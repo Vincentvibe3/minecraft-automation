@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: minecraft
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: minecraft
+  
+  template:
+    metadata:
+      labels:
+        app: minecraft
+
+    spec:
+      volumes:
+      - name: worldclaim
+        persistentVolumeClaim:
+          claimName: {{ .Values.worldName }}-claim
+
+      containers:
+      - name: minecraft
+        image: localhost:32000/fabric:{{ .Values.mcVersion }}
+        env:
+        - name: memory
+          value: {{ .Values.resources.javaMemory }}
+        - name: eula
+          value: "true"
+        - name: rcon
+          value: "true"
+        - name: rconpwd
+          valueFrom:
+            secretKeyRef:
+              name: rcon-secrets
+              key: rconpass
+        resources:
+          limits:
+            memory: {{ .Values.resources.containerMemory }}
+            cpu: "2"
+            ephemeral-storage: 1Gi
+        volumeMounts:
+          - name: worldclaim
+            mountPath: /home/server/data
+        ports:
+          - containerPort: 25565

@@ -20,20 +20,17 @@ RUN $JAVA_HOME/bin/jlink \
 FROM docker.io/eclipse-temurin:17 as server_files_setup
 WORKDIR /home/server/data
 COPY --from=fabric_download /server.jar ../server.jar
-RUN java -Xmx8G -jar ../server.jar nogui
+RUN java -Xmx2G -jar ../server.jar nogui
 
 # Setup Image
 FROM docker.io/ubuntu:latest
-# FROM docker.io/eclipse-temurin:17
 ENV JAVA_HOME=/opt/java/openjdk
 ENV PATH "${JAVA_HOME}/bin:/home/server:${PATH}"
 # ENV PATH "/home/server:${PATH}"
 WORKDIR /home/server/data
 COPY --from=jre-build /javaruntime $JAVA_HOME
 COPY --from=fabric_download /server.jar ../server.jar
-COPY --from=server_files_setup /home/server/data .
-RUN cp -r ./versions ../versions
-RUN cp -r ./libraries ../libraries
+COPY --from=server_files_setup /home/server/data /home/server/default
 COPY /start.sh ../start.sh
 RUN chmod +x ../start.sh
 
@@ -45,6 +42,7 @@ ENV rconpwd=""
 ENV gamemode=""
 ENV difficulty=""
 ENV whitelist=""
+ENV memory="2G"
 EXPOSE 25565
 EXPOSE 25575
 ENTRYPOINT [ "../start.sh" ]

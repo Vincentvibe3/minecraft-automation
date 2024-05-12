@@ -1,0 +1,41 @@
+# Default values for minecraft.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+worldName: mc-world
+mcVersion: 1.20.1
+backupSchedule: "0 0 * * *"
+
+resources:
+  javaMemory: "4G"
+  containerMemory: "5G"
+
+ingress:
+  web: 
+    # If web ingress is to be accessed on a single subdomain
+    # This will put code server under https://sub.domain.tld/
+    # and bluemap under https://sub.domain.tld/bluemap
+    singleSubdomain: false
+
+    # This value is used when single-subdomain is true
+    webSubdomain: ""
+
+    # The following values are ignored if single-subdomain is true
+    bluemapSubdomain: "" #FQDN for bluemap subdomain
+    codeServerSubdomain: "" #FQDN for code server for bluemap subdomain
+
+  minecraft:
+    nodePort: 30000 # NodePort to expose the server from
+
+storage:
+  hostname: "" # Hostname of the node where files are to be stored
+  worldDir: "" # Directory where all files will be stored including backups and bluemap config
+  volumeSize: "" # Size of each volume
+
+# Secrets for s3 bucket backups and rcon configuration
+secrets:
+  s3Id: ""
+  s3Secret: ""
+  s3Endpoint: ""
+  s3Bucket: ""
+  rconPass: "admin" 

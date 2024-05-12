@@ -1,4 +1,5 @@
 #!/bin/sh
+cp -r --update=none /home/server/default/* .
 if test "$eula" = "true" ; then
 	sed -i 's/eula=false/eula=true/' eula.txt
 fi
@@ -25,12 +26,13 @@ if test -e ./libraries; then
 	rm -r ./libraries
 fi
 cp -r ../libraries .
-java -Xmx2G -jar ../server.jar nogui &
-# from https://mbien.dev/blog/entry/stopping-containers-correctly
-# Pass SIGTERM to the jvm to allow graceful shutdown
-PID=$!
-trap "kill -TERM $PID" INT TERM
-wait $PID
-trap - TERM INT
-wait $PID
-EXIT_STATUS=$?
+
+while true; do
+	java -Xmx2G -jar ../server.jar nogui &
+	# from https://mbien.dev/blog/entry/stopping-containers-correctly
+	# Pass SIGTERM to the jvm to allow graceful shutdown
+	PID=$!
+	trap "kill -TERM $PID; break" INT TERM
+	wait $PID
+	EXIT_STATUS=$?
+done

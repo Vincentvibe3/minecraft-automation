@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: minecraft-management
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: minecraft-management
+  
+  template:
+    metadata:
+      labels:
+        app: minecraft-management
+
+    spec:
+      volumes:
+      - name: worldclaim
+        persistentVolumeClaim:
+          claimName: {{ .Values.worldName }}-claim
+      - name: bluemap-config-claim
+        persistentVolumeClaim:
+          claimName: bluemap-config-claim
+
+      containers:
+      - name: management
+        image: localhost:32000/management:latest
+        resources:
+          limits:
+            memory: "256Mi"
+            cpu: "1"
+            ephemeral-storage: 1Gi
+        volumeMounts:
+          - name: worldclaim
+            mountPath: /home/workspace/world-data
+          - name: bluemap-config-claim
+            mountPath: /home/workspace/bluemap-config
+
+        env:
+          - name: MCRCON_HOST
+            value: "minecraft-rcon"
+          - name: MCRCON_PASS
+            valueFrom:
+              secretKeyRef:
+                name: rcon-secrets
+                key: rconpass
+        ports:
+          - containerPort: 3000

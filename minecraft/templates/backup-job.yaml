@@ -1,0 +1,58 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: backup-job
+spec:
+  schedule: {{ .Values.backupSchedule }}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          volumes:
+          - name: worldclaim
+            persistentVolumeClaim:
+              claimName: {{ .Values.worldName }}-claim
+          - name: backup-world-claim
+            persistentVolumeClaim:
+              claimName: {{ .Values.worldName }}-backup-claim
+
+          containers:
+          - name: worldbackup
+            image: localhost:32000/backup:latest
+            env:
+            - name: WORLD_NAME
+              value: {{ .Values.worldName }}
+            - name: MCRCON_HOST
+              value: "minecraft-rcon"
+            - name: MCRCON_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: rcon-secrets
+                  key: rconpass
+            - name: BUCKET
+              valueFrom:
+                secretKeyRef:
+                  name: s3-secrets
+                  key: bucket
+            - name: S3_ENDPOINT
+              valueFrom:
+                secretKeyRef:
+                  name: s3-secrets
+                  key: endpoint
+            - name: KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: s3-secrets
+                  key: id
+            - name: KEY_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: s3-secrets
+                  key: secret
+                  
+            volumeMounts:
+            - name: worldclaim
+              mountPath: /home/server/data
+            - name: backup-world-claim
+              mountPath: /home/server/backups
+          restartPolicy: OnFailure
