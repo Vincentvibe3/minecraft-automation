@@ -39,7 +39,7 @@ while true; do
 	trap "kill -TERM $PID; break" INT TERM
 	wait $PID
 	EXIT_STATUS=$?
-	if [[$EXIT_STATUS != 0]];then
+	if [[ $EXIT_STATUS != 0 ]];then
 		break;
 	fi
 	echo "Restarting server"
