@@ -28,7 +28,6 @@ spec:
         resources:
           limits:
             memory: "256Mi"
-            cpu: "0.25"
             ephemeral-storage: 1Gi
         volumeMounts:
           - name: worldclaim

@@ -37,7 +37,6 @@ spec:
         resources:
           limits:
             memory: {{ .Values.resources.containerMemory }}
-            cpu: "1.5"
             ephemeral-storage: 1Gi
         volumeMounts:
           - name: worldclaim

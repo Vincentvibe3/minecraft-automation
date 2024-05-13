@@ -4,7 +4,7 @@ metadata:
   name: {{ .Values.worldName }}-bluemap-volume-config
 spec:
   capacity:
-    storage: {{ .Values.storage.volumeSize }}
+    storage: "100M"
   volumeMode: Filesystem
   accessModes:
     - ReadWriteMany
@@ -50,7 +50,7 @@ metadata:
   name: {{ .Values.worldName }}-bluemap-volume-web
 spec:
   capacity:
-    storage: {{ .Values.storage.volumeSize }}
+    storage: "100M"
   volumeMode: Filesystem
   accessModes:
     - ReadWriteMany
@@ -74,7 +74,7 @@ metadata:
 spec:
   resources:
     requests:
-      storage: {{ .Values.storage.volumeSize }}
+      storage: "100M"
   storageClassName: {{ .Values.worldName }}-local-storage
   volumeName: {{ .Values.worldName }}-bluemap-volume-config
   volumeMode: Filesystem
@@ -102,7 +102,7 @@ metadata:
 spec:
   resources:
     requests:
-      storage: {{ .Values.storage.volumeSize }}
+      storage: "100M"
   storageClassName: {{ .Values.worldName }}-local-storage
   volumeName: {{ .Values.worldName }}-bluemap-volume-web
   volumeMode: Filesystem

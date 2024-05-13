@@ -36,7 +36,7 @@ spec:
 
   routes:
     {{ if eq .Values.ingress.web.singleSubdomain true }}
-    - match: Host(`{{ .Values.ingress.web.webSubdomain }}`) && PathPrefix(`/bluemap`)
+    - match: Host(`{{ .Values.ingress.web.webSubdomain }}`) || Host(`localhost`) && PathPrefix(`/bluemap`)
     {{ else }}
     - match: Host(`{{ .Values.ingress.web.bluemapSubdomain }}`) && PathPrefix(`/`)
     {{ end }}

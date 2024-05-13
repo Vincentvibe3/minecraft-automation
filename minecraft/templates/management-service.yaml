@@ -25,7 +25,7 @@ spec:
 
   routes:
     {{ if eq .Values.ingress.web.singleSubdomain true }}
-    - match: Host(`{{ .Values.ingress.web.webSubdomain }}`) && PathPrefix(`/`)
+    - match: Host(`{{ .Values.ingress.web.webSubdomain }}`)|| Host(`localhost`) && PathPrefix(`/`)
     {{ else }}
     - match: Host(`{{ .Values.ingress.web.codeServerSubdomain }}`) && PathPrefix(`/`)
     {{ end }}
