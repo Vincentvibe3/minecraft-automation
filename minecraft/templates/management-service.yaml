@@ -25,11 +25,14 @@ spec:
 
   routes:
     {{ if eq .Values.ingress.web.singleSubdomain true }}
-    - match: Host(`{{ .Values.ingress.web.webSubdomain }}`)|| Host(`localhost`) && PathPrefix(`/`)
+    - match: (Host(`{{ .Values.ingress.web.webSubdomain }}`)&& PathPrefix(`/`)) || (Host(`localhost`) && PathPrefix(`/`))
     {{ else }}
     - match: Host(`{{ .Values.ingress.web.codeServerSubdomain }}`) && PathPrefix(`/`)
     {{ end }}
       kind: Rule
+
+      middlewares:
+        - name: basic-auth-middleware
 
       services:
         - name: minecraft-management

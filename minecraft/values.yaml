@@ -39,3 +39,4 @@ secrets:
   s3Endpoint: ""
   s3Bucket: ""
   rconPass: "admin" 
+  basicauthUsers: ""
