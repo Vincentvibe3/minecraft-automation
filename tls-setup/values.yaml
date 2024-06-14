@@ -1,2 +1,7 @@
 cloudflare:
   token: ""
+
+storage:
+  volumeSize: 1G
+  certDir: ""
+  hostname: ""
