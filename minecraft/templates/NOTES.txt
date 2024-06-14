@@ -4,6 +4,6 @@ code-server is found at https://{{ .Values.ingress.web.webSubdomain }}
 bluemap is found at https://{{ .Values.ingress.web.webSubdomain }}/bluemap
 {{- else }}
 code-server is available at https://{{ .Values.ingress.web.codeServerSubdomain }}
-code-server is available at https://{{ .Values.ingress.web.bluemapSubdomain }}
+bluemap is available at https://{{ .Values.ingress.web.bluemapSubdomain }}
 {{- end }}
 Minecraft should be available on NodePort {{ .Values.ingress.minecraft.nodePort }}

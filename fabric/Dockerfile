@@ -7,7 +7,7 @@ RUN apk add --no-cache curl
 RUN curl -Jf https://meta.fabricmc.net/v2/versions/loader/${mc_version}/${fabric_version}/${fabric_installer_version}/server/jar -o /server.jar
 
 # Create a custom Java runtime
-FROM docker.io/eclipse-temurin:17 as jre-build
+FROM docker.io/eclipse-temurin:21 as jre-build
 RUN $JAVA_HOME/bin/jlink \
          --add-modules ALL-MODULE-PATH \
          --strip-debug \
@@ -17,7 +17,7 @@ RUN $JAVA_HOME/bin/jlink \
          --output /javaruntime
 
 #Create minecraft files
-FROM docker.io/eclipse-temurin:17 as server_files_setup
+FROM docker.io/eclipse-temurin:21 as server_files_setup
 WORKDIR /home/server/data
 COPY --from=fabric_download /server.jar ../server.jar
 RUN java -Xmx2G -jar ../server.jar nogui
