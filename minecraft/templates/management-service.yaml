@@ -37,3 +37,6 @@ spec:
       services:
         - name: minecraft-management
           port: 3000
+
+  tls:
+    certResolver: letsencrypt

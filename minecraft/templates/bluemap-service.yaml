@@ -46,3 +46,6 @@ spec:
       services:
         - name: bluemap-service
           port: 8100
+          
+  tls:
+    certResolver: letsencrypt
