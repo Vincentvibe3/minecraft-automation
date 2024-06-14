@@ -8,7 +8,7 @@ spec:
     storage: {{ .Values.storage.volumeSize }}
   volumeMode: Filesystem
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
   storageClassName: cert-local-storage
   local:
