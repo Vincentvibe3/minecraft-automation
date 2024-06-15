@@ -33,7 +33,6 @@ spec:
         image: ghcr.io/bluemap-minecraft/bluemap:v4.1
         resources:
           limits:
-            memory: "256Mi"
             ephemeral-storage: 1Gi
         volumeMounts:
           - name: bluemap-config-claim
@@ -44,8 +43,6 @@ spec:
         image: busybox:1.28
         resources:
           limits:
-            memory: "256Mi"
-            cpu: "1"
             ephemeral-storage: 1Gi
         volumeMounts:
           - name: bluemap-config-claim
@@ -57,8 +54,6 @@ spec:
         image: ghcr.io/bluemap-minecraft/bluemap:v4.1
         resources:
           limits:
-            memory: "1Gi"
-            cpu: "1"
             ephemeral-storage: 1Gi
         volumeMounts:
           - name: bluemap-config-claim
