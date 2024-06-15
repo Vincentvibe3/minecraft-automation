@@ -1,4 +1,4 @@
-{{ if eq .Values.worldName true }}
+{{ if eq .Values.backup true }}
 apiVersion: batch/v1
 kind: CronJob
 metadata:
