@@ -1,3 +1,3 @@
-mkdir -p ~/$1/backup
-mkdir -p ~/$1/bluemap-config
-mkdir -p ~/$1/server
+mkdir -p ~/worlds/$1/backup
+mkdir -p ~/worlds/$1/bluemap-config
+mkdir -p ~/worlds/$1/server
