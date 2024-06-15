@@ -5,7 +5,7 @@ RUN git clone https://github.com/Tiiffi/mcrcon.git
 RUN cd mcrcon && make
 FROM docker.io/gitpod/openvscode-server:latest
 USER root 
-RUN apt-get update && apt-get install -y --no-install-recommends python3 python3-pip make vim
+RUN apt-get update && apt-get install -y --no-install-recommends python3 python3-pip make vim zip
 ENV PATH "/home/tools:${PATH}"
 COPY /modDownloader.py /home/tools/modDownloader
 COPY --from=mcrcon_build /home/build/mcrcon/mcrcon /tmp/mcrcon/mcrcon

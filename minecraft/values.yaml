@@ -6,6 +6,8 @@ worldName: mc-world
 mcVersion: 1.20.1
 backupSchedule: "0 0 * * *"
 
+backup: true
+
 resources:
   javaMemory: "4G"
   containerMemory: "5G"
