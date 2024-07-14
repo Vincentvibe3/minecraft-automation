@@ -42,4 +42,7 @@ spec:
           - name: worldclaim
             mountPath: /home/server/data
         ports:
-          - containerPort: 25565
+          - name: mc
+            containerPort: 25565
+          - name: voicechat
+            containerPort: 30001
