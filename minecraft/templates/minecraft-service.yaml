@@ -11,6 +11,10 @@ spec:
     port: 25565
     targetPort: 25565
     nodePort: {{ .Values.ingress.minecraft.nodePort }}
+  - name: voicechat
+    port: 24454
+    targetPort: 24454
+    nodePort: {{ .Values.ingress.minecraft.voiceChatNodePort }}
 ---
 apiVersion: v1
 kind: Service

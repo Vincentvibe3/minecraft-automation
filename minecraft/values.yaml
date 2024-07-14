@@ -28,6 +28,7 @@ ingress:
 
   minecraft:
     nodePort: 30000 # NodePort to expose the server from
+    voiceChatNodePort: 30001 # NodePort to expose the server from
 
 storage:
   hostname: "" # Hostname of the node where files are to be stored
