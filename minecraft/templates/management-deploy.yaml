@@ -21,6 +21,9 @@ spec:
       - name: bluemap-config-claim
         persistentVolumeClaim:
           claimName: bluemap-config-claim
+      - name: bluemap-data-claim
+        persistentVolumeClaim:
+          claimName: bluemap-data-claim
 
       containers:
       - name: management
@@ -34,7 +37,7 @@ spec:
           - name: bluemap-config-claim
             mountPath: /home/workspace/bluemap-config
           - name: bluemap-data-claim
-            mountPath: /app/data
+            mountPath: /home/workspace/bluemap-data
 
         env:
           - name: MCRCON_HOST
