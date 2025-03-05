@@ -33,6 +33,8 @@ spec:
             mountPath: /home/workspace/world-data
           - name: bluemap-config-claim
             mountPath: /home/workspace/bluemap-config
+          - name: bluemap-data-claim
+            mountPath: /app/data
 
         env:
           - name: MCRCON_HOST
