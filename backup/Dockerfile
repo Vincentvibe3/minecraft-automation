@@ -13,7 +13,7 @@ RUN make install
 WORKDIR /home
 #Create env
 RUN python3 -m venv ./env
-RUN /home/env/bin/python3 -m pip install boto3
+RUN /home/env/bin/python3 -m pip install "boto3==1.35.99"
 COPY /start.sh ../start.sh
 COPY s3upload.py ../s3upload.py
 RUN chmod +x ../start.sh
